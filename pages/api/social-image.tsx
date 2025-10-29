@@ -12,7 +12,7 @@ import {
 
 import * as libConfig from '@/lib/config'
 import interSemiBoldFont from '@/lib/fonts/inter-semibold'
-import { mapImageUrl } from '@/lib/map-image-url'
+import { createMapImageUrl } from '@/lib/map-image-url'
 import { notion } from '@/lib/notion-api'
 import { type NotionPageInfo, type PageError } from '@/lib/types'
 
@@ -176,6 +176,8 @@ export async function getNotionPageInfo({
   | { type: 'error'; error: PageError }
 > {
   const recordMap = await notion.getPage(pageId)
+
+  const mapImageUrl = createMapImageUrl(recordMap)
 
   const keys = Object.keys(recordMap?.block || {})
   const block = recordMap?.block?.[keys[0]!]?.value

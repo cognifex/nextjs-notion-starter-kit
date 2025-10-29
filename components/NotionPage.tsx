@@ -17,7 +17,7 @@ import { useSearchParam } from 'react-use'
 
 import type * as types from '@/lib/types'
 import * as config from '@/lib/config'
-import { mapImageUrl } from '@/lib/map-image-url'
+import { createMapImageUrl } from '@/lib/map-image-url'
 import { getCanonicalPageUrl, mapPageUrl } from '@/lib/map-page-url'
 import { searchNotion } from '@/lib/search-notion'
 import { useDarkMode } from '@/lib/use-dark-mode'
@@ -191,6 +191,11 @@ export function NotionPage({
 }: types.PageProps) {
   const router = useRouter()
   const lite = useSearchParam('lite')
+
+  const mapImageUrl = React.useMemo(
+    () => createMapImageUrl(recordMap),
+    [recordMap]
+  )
 
   const components = React.useMemo<Partial<NotionComponents>>(
     () => ({
