@@ -24,11 +24,7 @@ const resolveSignedUrl = (
   }
 
   const blockId = block.id
-  if (typeof blockId !== 'string') {
-    return signedUrls?.[blockId as any]
-  }
-
-  return signedUrls?.[blockId] ?? signedUrls?.[blockId.replaceAll('-', '')]
+  return signedUrls?.[blockId] ?? signedUrls?.[blockId?.replace(/-/g, '')]
 }
 
 export const mapImageUrlWithRecordMap = (

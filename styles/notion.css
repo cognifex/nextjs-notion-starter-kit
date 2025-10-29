@@ -60,7 +60,11 @@
 }
 
 .notion-gallery-grid .notion-page-icon-inline {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75em;
+  margin-right: 0.5rem;
 }
 
 .notion-gallery-grid .notion-page-title-text {
