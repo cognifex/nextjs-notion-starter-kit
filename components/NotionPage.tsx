@@ -1,6 +1,6 @@
 import cs from 'classnames'
 import dynamic from 'next/dynamic'
-import Image from 'next/legacy/image'
+import Image, { type ImageProps } from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { type PageBlock } from 'notion-types'
@@ -30,6 +30,55 @@ import { Page404 } from './Page404'
 import { PageAside } from './PageAside'
 import { PageHead } from './PageHead'
 import styles from './styles.module.css'
+
+const DEFAULT_NOTION_IMAGE_SIZES = '(min-width: 768px) 720px, 100vw'
+
+type NotionImageProps = Omit<ImageProps, 'src' | 'alt'> & {
+  src?: ImageProps['src']
+  alt?: string | null
+  width?: number
+  height?: number
+}
+
+const NotionImage = React.memo(function NotionImage({
+  alt,
+  src,
+  width,
+  height,
+  fill,
+  sizes,
+  priority,
+  placeholder,
+  blurDataURL,
+  ...rest
+}: NotionImageProps) {
+  if (!src) {
+    return null
+  }
+
+  const shouldFill = fill ?? !(width && height)
+  const resolvedSizes = shouldFill
+    ? sizes ?? DEFAULT_NOTION_IMAGE_SIZES
+    : sizes
+  const resolvedPlaceholder = placeholder ?? (blurDataURL ? 'blur' : 'empty')
+
+  return (
+    <Image
+      {...rest}
+      alt={alt ?? ''}
+      src={src}
+      width={shouldFill ? undefined : width}
+      height={shouldFill ? undefined : height}
+      fill={shouldFill}
+      sizes={resolvedSizes}
+      priority={priority ?? false}
+      placeholder={resolvedPlaceholder}
+      blurDataURL={blurDataURL}
+    />
+  )
+})
+
+NotionImage.displayName = 'NotionImage'
 
 // -----------------------------------------------------------------------------
 // dynamic imports for optional components
@@ -199,7 +248,7 @@ export function NotionPage({
 
   const components = React.useMemo<Partial<NotionComponents>>(
     () => ({
-      nextLegacyImage: Image,
+      nextImage: NotionImage,
       nextLink: Link,
       Code,
       Collection,
